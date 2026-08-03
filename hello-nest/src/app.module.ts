@@ -37,7 +37,7 @@ ConfigModule.forRoot({
         url: config.get<string>('DATABASE_URL'),
 
         ssl: {
-          rejectUnauthorized: false,
+          rejectUnauthorized: true,
         },
 
         autoLoadEntities: true,

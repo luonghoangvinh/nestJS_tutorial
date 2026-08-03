@@ -1,6 +1,7 @@
 import {
     Body,
     Controller,
+    Header,
     Post,
 } from '@nestjs/common';
 
@@ -15,12 +16,26 @@ export class AuthController {
     ) { }
 
     @Post('login')
+    @Header('Cache-Control', 'no-store')
+    @Header('Pragma', 'no-cache')
+    @Header('Expires', '0')
     login(@Body() body: LoginDto) {
         return this.authService.login(body);
     }
 
     @Post('signup')
+    @Header('Cache-Control', 'no-store')
+    @Header('Pragma', 'no-cache')
+    @Header('Expires', '0')
     signup(@Body() createAccountDto: CreateUserDto) {
         return this.authService.signup(createAccountDto);
+    }
+
+    @Post('logout')
+    @Header('Cache-Control', 'no-store')
+    @Header('Pragma', 'no-cache')
+    @Header('Expires', '0')
+    logout(@Body('token') token: string) {
+        return this.authService.logout(token);
     }
 }

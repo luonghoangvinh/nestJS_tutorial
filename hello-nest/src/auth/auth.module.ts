@@ -6,15 +6,17 @@ import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from './strategies/jwt.strategy/jwt.strategy';
+import { RedisModule } from '../redis/redis.module';
 
 @Module({
     imports: [
         UsersModule,
         PassportModule,
+        RedisModule,
         JwtModule.register({
             secret: process.env.JWT_SECRET || 'jwt-secret',
             signOptions: {
-                expiresIn: '1d',
+                expiresIn: '1h',
             },
         }),
     ],

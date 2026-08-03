@@ -11,12 +11,14 @@ import { UsersService } from '../users/users.service';
 
 import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
+import { RedisService } from '../redis/redis.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private readonly usersService: UsersService,
         private readonly jwtService: JwtService,
+        private readonly redisService: RedisService,
     ) { }
 
     /**
@@ -78,7 +80,9 @@ export class AuthService {
         };
 
         return {
-            access_token: this.jwtService.sign(payload),
+            access_token: this.jwtService.sign(payload,{
+                expiresIn: '1h',
+            }),
             user: {
                 id: user.id,
                 username: user.username,
@@ -87,7 +91,14 @@ export class AuthService {
         };
     }
 
-
+    async logout(token: string) {
+    await this.redisService.getClient().set(
+        `blacklist:${token}`,
+        'true',
+        'EX',
+        3600,
+    );
+}
     async validateUser(id: string) {
         return this.usersService.findById(id);
     }
