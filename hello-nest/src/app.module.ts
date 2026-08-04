@@ -9,6 +9,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UsersModule } from './users/users.module';
 import { ArticlesModule } from './articles/articles.module';
 import { CommentsModule } from './comments/comments.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,7 +28,7 @@ import { CommentsModule } from './comments/comments.module';
         },
       ],
     }),
-ConfigModule.forRoot({
+    ConfigModule.forRoot({
       isGlobal: true,
     }),
     TypeOrmModule.forRootAsync({
@@ -44,12 +45,13 @@ ConfigModule.forRoot({
         synchronize: false,
       }),
     }),
+    AuthModule,
     Tutorial1Module,
     UsersModule,
     ArticlesModule,
-    CommentsModule
+    CommentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}
