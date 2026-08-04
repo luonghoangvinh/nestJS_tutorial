@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-
 import { User } from './entities/user.entity';
 
 @Injectable()
@@ -73,5 +72,30 @@ export class UsersService {
     const user = await this.findById(id);
 
     await this.usersRepository.remove(user);
+  }
+
+  async updateAvatar(
+    userId: number,
+    file: any,
+  ) {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+    });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    // Đường dẫn lưu trong database
+    const avatarUrl = `/uploads/avatars/${file.filename}`;
+
+    user.avatar = avatarUrl;
+
+    await this.usersRepository.save(user);
+
+    return {
+      message: 'Update avatar successfully',
+      avatar: avatarUrl,
+    };
   }
 }
