@@ -8,11 +8,12 @@ import {
 } from 'typeorm';
 import { Article } from '../../articles/entities/article.entity';
 import { Comment } from '../../comments/entities/comment.entity';
+import { Follow } from '../../follows/entities/follow.entity';
 
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id!: string;
+  id!: number;
 
   @Column({
     type: 'varchar',
@@ -63,4 +64,12 @@ export class User {
 
   @OneToMany(() => Comment, (comment) => comment.user)
   comments?: Comment[];
+
+  // Những người đang follow user này
+  @OneToMany(() => Follow, (follow) => follow.following)
+  followers?: Follow[];
+
+  // Những người mà user này đang follow
+  @OneToMany(() => Follow, (follow) => follow.follower)
+  following?: Follow[];
 }

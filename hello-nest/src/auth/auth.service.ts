@@ -117,7 +117,7 @@ export class AuthService {
     return blacklisted === 'true';
   }
 
-  async validateUser(id: string) {
+  async validateUser(id: number) {
     return this.usersService.findById(id);
   }
 }

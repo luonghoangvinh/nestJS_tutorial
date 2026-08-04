@@ -19,7 +19,7 @@ export class UsersService {
     return this.usersRepository.find();
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: number): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { id },
     });
@@ -61,7 +61,7 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async update(id: string, userData: Partial<User>): Promise<User> {
+  async update(id: number, userData: Partial<User>): Promise<User> {
     const user = await this.findById(id);
 
     Object.assign(user, userData);
@@ -69,7 +69,7 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async remove(id: string): Promise<void> {
+  async remove(id: number): Promise<void> {
     const user = await this.findById(id);
 
     await this.usersRepository.remove(user);
