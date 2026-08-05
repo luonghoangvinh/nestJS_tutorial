@@ -12,19 +12,9 @@ import type { Response } from 'express';
 import { FollowService } from './follows.service';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { antiCacheHeaders } from '../users/users.controller';
 
 
-const CACHE_CONTROL_HEADER = 'Cache-Control';
-const NO_STORE_CACHE_CONTROL = 'no-store, no-cache, must-revalidate';
-const PRAGMA_HEADER = 'Pragma';
-const NO_CACHE_HEADER_VALUE = 'no-cache';
-const EXPIRES_HEADER = 'Expires';
-const EXPIRED_HEADER_VALUE = '0';
-function antiCacheHeaders(response: Response): void {
-  response.setHeader(CACHE_CONTROL_HEADER, NO_STORE_CACHE_CONTROL);
-  response.setHeader(PRAGMA_HEADER, NO_CACHE_HEADER_VALUE);
-  response.setHeader(EXPIRES_HEADER, EXPIRED_HEADER_VALUE);
-}
 
 @Controller('follow')
 export class FollowController {

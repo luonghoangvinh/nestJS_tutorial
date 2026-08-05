@@ -12,7 +12,7 @@ export class LoginDto {
   @IsString()
   @ApiProperty({
         description: 'Mật khẩu',
-        example: 'password123',
+        example: '123456',
     })
   @MinLength(6)
   password!: string;

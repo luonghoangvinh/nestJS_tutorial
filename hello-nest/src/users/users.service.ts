@@ -74,6 +74,42 @@ export class UsersService {
     await this.usersRepository.remove(user);
   }
 
+  async getProfile(userId: number){
+    const user = await this.usersRepository.findOne({
+  where: { id: userId },
+  relations: {
+    articles: true,
+    comments: true,
+    followers: true,
+    following: true,
+  },
+  select:{
+    articles:{
+      id:true,
+      title:true,
+      content:true,
+      createdAt:true,
+      updatedAt:true,
+    },
+    comments:{
+      id:true,
+      articleId:true,
+      comment:true,
+    },
+    followers:{
+      followerId:true,
+      followingId:false,
+    },
+    following:{
+      followerId:false,
+      followingId:true,
+    }
+  }
+});
+
+    return  user;
+  }
+
   async updateAvatar(
     userId: number,
     file: any,

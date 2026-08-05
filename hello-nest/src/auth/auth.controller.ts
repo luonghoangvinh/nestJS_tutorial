@@ -14,6 +14,7 @@ import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { AuthRateLimitGuard } from './auth-rate-limit.guard';
 import { ApiOperation } from '@nestjs/swagger';
+import { antiCacheHeaders } from '../users/users.controller';
 
 type SessionRequest = Request & {
   session?: {
@@ -21,18 +22,7 @@ type SessionRequest = Request & {
   };
 };
 
-const CACHE_CONTROL_HEADER = 'Cache-Control';
-const NO_STORE_CACHE_CONTROL = 'no-store, no-cache, must-revalidate';
-const PRAGMA_HEADER = 'Pragma';
-const NO_CACHE_HEADER_VALUE = 'no-cache';
-const EXPIRES_HEADER = 'Expires';
-const EXPIRED_HEADER_VALUE = '0';
 
-function antiCacheHeaders(response: Response): void {
-  response.setHeader(CACHE_CONTROL_HEADER, NO_STORE_CACHE_CONTROL);
-  response.setHeader(PRAGMA_HEADER, NO_CACHE_HEADER_VALUE);
-  response.setHeader(EXPIRES_HEADER, EXPIRED_HEADER_VALUE);
-}
 
 @Controller('auth')
 export class AuthController {

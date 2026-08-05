@@ -22,8 +22,8 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes } from '@nestjs/swagger';
-import { extname } from 'path/win32';
-import { randomUUID } from 'crypto';
+import { extname } from 'node:path/win32';
+import { randomUUID } from 'node:crypto';
 import { diskStorage } from 'multer';
 import type { Response } from 'express';
 
@@ -33,7 +33,7 @@ const PRAGMA_HEADER = 'Pragma';
 const NO_CACHE_HEADER_VALUE = 'no-cache';
 const EXPIRES_HEADER = 'Expires';
 const EXPIRED_HEADER_VALUE = '0';
-function antiCacheHeaders(response: Response): void {
+export function antiCacheHeaders(response: Response): void {
   response.setHeader(CACHE_CONTROL_HEADER, NO_STORE_CACHE_CONTROL);
   response.setHeader(PRAGMA_HEADER, NO_CACHE_HEADER_VALUE);
   response.setHeader(EXPIRES_HEADER, EXPIRED_HEADER_VALUE);
@@ -66,6 +66,16 @@ export class UsersController {
   @Delete(':id')
   remove(@Param('id') id: number) {
     return this.usersService.remove(id);
+  }
+
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
+  @Get('profile/:id')
+  getProfile(@Param('id') id: number,
+    @Res({ passthrough: true }) res: Response
+  ) {
+    antiCacheHeaders(res);
+    return this.usersService.getProfile(id);
   }
 
   @ApiBearerAuth('access-token')
