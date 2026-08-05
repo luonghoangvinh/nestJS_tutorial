@@ -20,7 +20,7 @@ export class Article {
     name: 'user_id',
     type: 'bigint',
   })
-  userId!: string;
+  userId!: number;
 
   @Column({
     type: 'varchar',
