@@ -10,6 +10,6 @@ export default new DataSource({
 
     synchronize: false,
     ssl: {
-        rejectUnauthorized: false,
+        rejectUnauthorized: true,
     },
 });
