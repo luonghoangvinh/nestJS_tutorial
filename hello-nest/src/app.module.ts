@@ -10,6 +10,7 @@ import { ArticlesModule } from './articles/articles.module';
 import { CommentsModule } from './comments/comments.module';
 import { AuthModule } from './auth/auth.module';
 import { FollowsModule } from './follows/follows.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { FollowsModule } from './follows/follows.module';
     ArticlesModule,
     CommentsModule,
     FollowsModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
