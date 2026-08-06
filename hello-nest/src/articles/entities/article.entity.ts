@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Comment } from '../../comments/entities/comment.entity';
+import { Favorite } from '../../favorites/entities/favorite.entity';
 
 @Entity('articles')
 export class Article {
@@ -59,4 +60,6 @@ export class Article {
 
   @OneToMany(() => Comment, (comment) => comment.article)
   comments?: Comment[];
+  @OneToMany(() => Favorite, (favorite) => favorite.article)
+  favorites?: Favorite[];
 }

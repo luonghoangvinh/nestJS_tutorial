@@ -9,6 +9,7 @@ import {
 import { Article } from '../../articles/entities/article.entity';
 import { Comment } from '../../comments/entities/comment.entity';
 import { Follow } from '../../follows/entities/follow.entity';
+import { Favorite } from '../../favorites/entities/favorite.entity';
 
 @Entity('users')
 export class User {
@@ -72,4 +73,7 @@ export class User {
   // Những người mà user này đang follow
   @OneToMany(() => Follow, (follow) => follow.follower)
   following?: Follow[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.user)
+  favorites?: Favorite[];
 }
