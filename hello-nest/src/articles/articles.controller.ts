@@ -48,6 +48,14 @@ export class ArticlesController {
     antiCacheHeaders(res);
     return this.articlesService.findOne(+id);
   }
+  
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
+  @Get('comments/:id')
+  getCommentsByArticleId(@Param('id') id: number, @Res({passthrough: true}) res:Response) {
+    antiCacheHeaders(res);
+    return this.articlesService.getCommentsByArticleId(id);
+  }
 
   @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)

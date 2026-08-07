@@ -1,42 +1,58 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
   Patch,
   Param,
   Delete,
+  Req,
+  UseGuards,
+  Res,
 } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
+import { ApiBearerAuth } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import type { Response } from 'express';
+import { antiCacheHeaders } from '../users/users.controller';
 
 @Controller('comments')
 export class CommentsController {
-  constructor(private readonly commentsService: CommentsService) {}
+  constructor(private readonly commentsService: CommentsService) { }
 
-  @Post()
-  create(@Body() createCommentDto: CreateCommentDto) {
-    return this.commentsService.create(createCommentDto);
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
+  @Post(":id")
+  create(
+    @Body() createCommentDto: CreateCommentDto,
+    @Param('id') articleId: number,
+    @Req() req,
+    @Res({ passthrough: true }) res: Response
+  ) {
+    antiCacheHeaders(res);
+    return this.commentsService.create(createCommentDto, req.user.id, articleId);
   }
 
-  @Get()
-  findAll() {
-    return this.commentsService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.commentsService.findOne(+id);
-  }
-
+  
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
+  update(
+    @Param('id') id: number,
+    @Body() updateCommentDto: UpdateCommentDto,
+    @Res({ passthrough: true }) res: Response
+  ) {
+    antiCacheHeaders(res);
+    return this.commentsService.update(id, updateCommentDto);
   }
 
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.commentsService.remove(+id);
+  async remove(@Param('id') id: number,
+    @Res({ passthrough: true }) res: Response) {
+    antiCacheHeaders(res);
+    return await this.commentsService.remove(id);
   }
 }

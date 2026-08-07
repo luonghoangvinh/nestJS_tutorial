@@ -43,4 +43,20 @@ export class ArticlesService {
       where: { userId: In(feedArticles) },
     });
   }
+  getCommentsByArticleId(articleId: number) {
+    return this.articleRepository.findOne({
+      where: { id: articleId },
+      relations: { comments: true },
+      select: {
+        id: true,
+        title: true,
+        comments: {
+          id: true,
+          userId: true,
+          comment: true,
+          createdAt: true,
+        },
+      },
+    });
+  }
 }

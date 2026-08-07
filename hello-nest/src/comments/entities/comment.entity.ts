@@ -12,19 +12,19 @@ import { Article } from '../../articles/entities/article.entity';
 @Entity('comments')
 export class Comment {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id!: number;
+  id?: number;
 
   @Column({
     name: 'user_id',
     type: 'bigint',
   })
-  userId!: string;
+  userId!: number;
 
   @Column({
     name: 'article_id',
     type: 'bigint',
   })
-  articleId!: string;
+  articleId!: number;
 
   @Column({
     type: 'text',
