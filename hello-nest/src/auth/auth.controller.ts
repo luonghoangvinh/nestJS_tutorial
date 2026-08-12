@@ -13,7 +13,7 @@ import { CreateUserDto } from '../users/dto/create-user.dto';
 import { LoginDto } from './dto/login.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
 import { AuthRateLimitGuard } from './auth-rate-limit.guard';
-import { ApiOperation } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiOperation } from '@nestjs/swagger';
 import { antiCacheHeaders } from '../users/users.controller';
 
 type SessionRequest = Request & {
@@ -51,10 +51,10 @@ export class AuthController {
     @Res({ passthrough: true }) res: Response,
   ) {
     antiCacheHeaders(res);
-
     return this.authService.signup(createAccountDto);
   }
 
+  @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)
   @Post('logout')
       @ApiOperation({
