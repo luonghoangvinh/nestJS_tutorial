@@ -1,0 +1,2 @@
+DATABASE_URL=postgresql://user:password@localhost:5432/hello_nest
+DATABASE_TEST_URL=postgresql://user:password@localhost:5432/hello_nest_test
