@@ -41,18 +41,20 @@ export class CommentsController {
   update(
     @Param('id') id: number,
     @Body() updateCommentDto: UpdateCommentDto,
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) res: Response,
+    @Req() req
   ) {
     antiCacheHeaders(res);
-    return this.commentsService.update(id, updateCommentDto);
+    return this.commentsService.update(id, updateCommentDto, req.user.id);
   }
 
   @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)
   @Delete(':id')
   async remove(@Param('id') id: number,
+    @Req() req,
     @Res({ passthrough: true }) res: Response) {
     antiCacheHeaders(res);
-    return await this.commentsService.remove(id);
+    return await this.commentsService.remove(id, req.user.id);
   }
 }
