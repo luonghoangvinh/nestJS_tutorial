@@ -5,6 +5,7 @@ import { Article } from './entities/article.entity';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Follow } from '../follows/entities/follow.entity';
+import { ArticleResponseDto } from './dto/article-response.dto';
 
 @Injectable()
 export class ArticlesService {
@@ -15,16 +16,21 @@ export class ArticlesService {
     private readonly followRepository: Repository<Follow>
   ) { }
 
-  create(createArticleDto: CreateArticleDto, userId: number) {
-    return this.articleRepository.save({ ...createArticleDto, userId });
+  async create(createArticleDto: CreateArticleDto, userId: number) {
+    const article = await this.articleRepository.save({ ...createArticleDto, userId });
+    return new ArticleResponseDto(article);
   }
 
   findAll() {
     return this.articleRepository.find();
   }
 
-  findOne(id: number) {
-    return this.articleRepository.findOne({ where: { id } });
+  async findOne(id: number) {
+    const article = await this.articleRepository.findOne({ where: { id } });
+    if (!article) {
+      throw new Error('Article not found');
+    }
+    return new ArticleResponseDto(article);
   }
 
   update(id: number, updateArticleDto: UpdateArticleDto) {
@@ -39,8 +45,9 @@ export class ArticlesService {
     const followedUsers = await this.followRepository.find({ where: { followerId: userId } });
 
     const feedArticles = followedUsers.map(follow => follow.followingId);
-    return this.articleRepository.find({
+    const articles = await this.articleRepository.find({
       where: { userId: In(feedArticles) },
     });
+    return articles.map(article => new ArticleResponseDto(article));
   }
 }

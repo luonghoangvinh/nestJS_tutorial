@@ -44,9 +44,9 @@ export class ArticlesController {
   @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: string, @Res({passthrough: true}) res:Response) {
+  findOne(@Param('id') id: number, @Res({passthrough: true}) res:Response) {
     antiCacheHeaders(res);
-    return this.articlesService.findOne(+id);
+    return this.articlesService.findOne(id);
   }
 
   @ApiBearerAuth('access-token')
