@@ -9,6 +9,7 @@ import {
   UseGuards,
   Req,
   Res,
+  Query,
 } from '@nestjs/common';
 import { ArticlesService } from './articles.service';
 import { CreateArticleDto } from './dto/create-article.dto';
@@ -17,6 +18,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { antiCacheHeaders } from '../users/users.controller';
 import type { Response } from 'express';
+import { ArticleQueryDto } from './dto/article-query.dto';
 
 @Controller('articles')
 export class ArticlesController {
@@ -36,9 +38,11 @@ export class ArticlesController {
   @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)
   @Get()
-  findAll(@Res({passthrough: true}) res:Response) {
+  findAll(
+    @Query() query:ArticleQueryDto,
+    @Res({passthrough: true}) res:Response) {
     antiCacheHeaders(res);
-    return this.articlesService.findAll();
+    return this.articlesService.findAll(query);
   }
 
   @ApiBearerAuth('access-token')
