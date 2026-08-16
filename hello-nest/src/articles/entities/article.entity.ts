@@ -21,7 +21,7 @@ export class Article {
     name: 'user_id',
     type: 'bigint',
   })
-  userId!: string;
+  userId!: number;
 
   @Column({
     type: 'varchar',
@@ -60,7 +60,6 @@ export class Article {
 
   @OneToMany(() => Comment, (comment) => comment.article)
   comments?: Comment[];
-
   @OneToMany(() => Favorite, (favorite) => favorite.article)
   favorites?: Favorite[];
 }
