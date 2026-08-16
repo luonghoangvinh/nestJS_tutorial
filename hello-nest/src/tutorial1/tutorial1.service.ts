@@ -4,9 +4,8 @@ import { UpdateTutorial1Dto } from './dto/update-tutorial1.dto';
 
 @Injectable()
 export class Tutorial1Service {
-
-  hello():string{
-    return "hello world";
+  hello(): string {
+    return 'hello world';
   }
   create(createTutorial1Dto: CreateTutorial1Dto) {
     return 'This action adds a new tutorial1';

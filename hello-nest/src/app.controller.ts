@@ -10,16 +10,16 @@ export class AppController {
 
   @Get()
   @ApiOperation({
-  summary: 'Hello World',
-  description: 'Trả về lời chào theo ngôn ngữ được chọn(vi hoặc en).',
-})
-@ApiQuery({
+    summary: 'Hello World',
+    description: 'Trả về lời chào theo ngôn ngữ được chọn(vi hoặc en).',
+  })
+  @ApiQuery({
     name: 'lang',
     required: false,
     example: 'vi',
     enum: ['vi', 'en'],
-    description: 'Language'
-})
+    description: 'Language',
+  })
   getHello(@I18n() i18n: I18nContext) {
     return this.appService.getHello(i18n);
   }
