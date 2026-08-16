@@ -10,11 +10,12 @@ import {
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { Comment } from '../../comments/entities/comment.entity';
+import { Favorite } from '../../favorites/entities/favorite.entity';
 
 @Entity('articles')
 export class Article {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id!: string;
+  id!: number;
 
   @Column({
     name: 'user_id',
@@ -59,4 +60,7 @@ export class Article {
 
   @OneToMany(() => Comment, (comment) => comment.article)
   comments?: Comment[];
+
+  @OneToMany(() => Favorite, (favorite) => favorite.article)
+  favorites?: Favorite[];
 }

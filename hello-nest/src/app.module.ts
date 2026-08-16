@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Tutorial1Module } from './tutorial1/tutorial1.module';
 import { I18nModule, QueryResolver } from 'nestjs-i18n';
 import * as path from 'node:path';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,6 +9,8 @@ import { UsersModule } from './users/users.module';
 import { ArticlesModule } from './articles/articles.module';
 import { CommentsModule } from './comments/comments.module';
 import { AuthModule } from './auth/auth.module';
+import { FollowsModule } from './follows/follows.module';
+import { FavoritesModule } from './favorites/favorites.module';
 
 @Module({
   imports: [
@@ -46,10 +47,11 @@ import { AuthModule } from './auth/auth.module';
       }),
     }),
     AuthModule,
-    Tutorial1Module,
     UsersModule,
     ArticlesModule,
     CommentsModule,
+    FollowsModule,
+    FavoritesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -12,7 +12,7 @@ import { Article } from '../../articles/entities/article.entity';
 @Entity('comments')
 export class Comment {
   @PrimaryGeneratedColumn({ type: 'bigint' })
-  id!: string;
+  id!: number;
 
   @Column({
     name: 'user_id',
