@@ -23,7 +23,6 @@ type SessionRequest = Request & {
 };
 
 
-
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
