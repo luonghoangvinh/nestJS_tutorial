@@ -39,7 +39,7 @@ export class ArticlesController {
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll(
-    @Query() query:ArticleQueryDto,
+    @Query() query: ArticleQueryDto,
     @Res({passthrough: true}) res:Response) {
     antiCacheHeaders(res);
     return this.articlesService.findAll(query);
@@ -48,9 +48,17 @@ export class ArticlesController {
   @ApiBearerAuth('access-token')
   @UseGuards(JwtAuthGuard)
   @Get(':id')
-  findOne(@Param('id') id: number, @Res({passthrough: true}) res:Response) {
+  findOne(@Param('id') id: string, @Res({passthrough: true}) res:Response) {
     antiCacheHeaders(res);
-    return this.articlesService.findOne(id);
+    return this.articlesService.findOne(+id);
+  }
+  
+  @ApiBearerAuth('access-token')
+  @UseGuards(JwtAuthGuard)
+  @Get('comments/:id')
+  getCommentsByArticleId(@Param('id') id: number, @Res({passthrough: true}) res:Response) {
+    antiCacheHeaders(res);
+    return this.articlesService.getCommentsByArticleId(id);
   }
 
   @ApiBearerAuth('access-token')

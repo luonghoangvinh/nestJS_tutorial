@@ -24,56 +24,56 @@ export class ArticlesService {
 
   async findAll(query: ArticleQueryDto) {
     const {
-        search,
-        userId,
-        page = 1,
-        limit = 10,
+      search,
+      userId,
+      page = 1,
+      limit = 10,
     } = query;
 
     const queryBuilder = this.articleRepository
-        .createQueryBuilder('article');
+      .createQueryBuilder('article');
 
     // Search
     if (search) {
-        queryBuilder.andWhere(
-            '(article.title ILIKE :search OR article.content ILIKE :search)',
-            {
-                search: `%${search}%`,
-            },
-        );
+      queryBuilder.andWhere(
+        '(article.title ILIKE :search OR article.content ILIKE :search)',
+        {
+          search: `%${search}%`,
+        },
+      );
     }
 
     // Filter
     if (userId) {
-        queryBuilder.andWhere(
-            'article.userId = :userId',
-            { userId },
-        );
+      queryBuilder.andWhere(
+        'article.userId = :userId',
+        { userId },
+      );
     }
 
     // Phân trang
     const skip = (page - 1) * limit;
 
     queryBuilder
-        .skip(skip)
-        .take(limit)
-        .orderBy('article.createdAt', 'DESC');
+      .skip(skip)
+      .take(limit)
+      .orderBy('article.createdAt', 'DESC');
 
     const [articles, total] =
-        await queryBuilder.getManyAndCount();
+      await queryBuilder.getManyAndCount();
 
     return {
-        data: articles.map(
-            article => new ArticleResponseDto(article),
-        ),
-        meta: {
-            page,
-            limit,
-            total,
-            totalPages: Math.ceil(total / limit),
-        },
+      data: articles.map(
+        article => new ArticleResponseDto(article),
+      ),
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
     };
-}
+  }
 
   async findOne(id: number) {
     const article = await this.articleRepository.findOne({ where: { id } });
@@ -100,4 +100,20 @@ export class ArticlesService {
     });
     return articles.map(article => new ArticleResponseDto(article));
   }
+getCommentsByArticleId(articleId: number) {
+  return this.articleRepository.findOne({
+    where: { id: articleId },
+    relations: { comments: true },
+    select: {
+      id: true,
+      title: true,
+      comments: {
+        id: true,
+        userId: true,
+        comment: true,
+        createdAt: true,
+      },
+    },
+  });
+}
 }
